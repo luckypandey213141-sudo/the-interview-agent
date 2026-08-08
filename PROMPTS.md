@@ -89,3 +89,13 @@ This log records the tool calls, prompts, and planning steps used by the AI Codi
     git commit -m "feat: integrate shader robot, compound chat input, and styling updates"
     git push origin main
     ```
+  - `write_to_file("lib/llm.ts")` (Overwrite) to adjust the Gemini core system prompts to adopt a modern, high-vibe "Gen Z developer lead" interview personality.
+  - `write_to_file("app/page.tsx")` (Overwrite) to introduce specific topic emoji indicators (`getTopicEmoji`) mapping visual icons to curriculum modules.
+  - `replace_file_content("app/globals.css")` to add interactive custom scrollbars and CSS `:has()` pseudo-class rules for rendering category-colored glows (hot pink for struggled, amber for skipped, cyan for strong) when hovering over plan cards.
+  - `run_command("npm run build")` to ensure compilation and typing checks pass with 0 errors.
+  - `run_command` to commit and push changes:
+    ```bash
+    git add .
+    git commit -m "feat: upgrade UI with GenZ developer touch, neon category shadows, custom scrollbars, emoji badges, and modern tech-lead conversational prompts"
+    git push origin main
+    ```
