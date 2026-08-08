@@ -27,16 +27,18 @@ export async function generatePersonalizedQuestion(
     if (questionState === "ASKED_INITIAL") {
       let promptPrefix = "";
       if (plannedDay.category === "struggled") {
-        promptPrefix = `I noticed that you spent ${plannedDay.attempts} attempts on the Day ${plannedDay.day} mission ("${plannedDay.title}"). That's a challenging topic! `;
+        promptPrefix = `Yo, I saw you spent ${plannedDay.attempts} attempts debugging the Day ${plannedDay.day} mission ("${plannedDay.title}"). Respect the hustle—that's a tough module! 🚀 `;
       } else if (plannedDay.category === "skipped") {
-        promptPrefix = `Looking at your record, you chose to skip the Day ${plannedDay.day} mission ("${plannedDay.title}"). `;
+        promptPrefix = `I noticed you skipped the Day ${plannedDay.day} mission ("${plannedDay.title}"). No sweat, let's conceptualize it now. 💡 `;
       } else if (plannedDay.category === "strong") {
-        promptPrefix = `You sailed right through Day ${plannedDay.day} ("${plannedDay.title}") in ${plannedDay.attempts} attempts. `;
+        promptPrefix = `You absolutely sailed through Day ${plannedDay.day} ("${plannedDay.title}") on first attempts. Beast mode! ⚡ `;
+      } else {
+        promptPrefix = `Let's cook with Day ${plannedDay.day} ("${plannedDay.title}"). 🍳 `;
       }
       
-      return `${promptPrefix}Let's discuss this module. Can you explain your core understanding of how we use tools like ${plannedDay.tools.slice(0, 2).join(" or ") || "the curriculum tools"} to achieve its objectives?`;
+      return `${promptPrefix}Can you explain the core design decisions you made here, and how you integrated tools like ${plannedDay.tools.slice(0, 2).join(" or ") || "the curriculum tools"} to make it work?`;
     } else {
-      return `That makes sense. In regards to Day ${plannedDay.day}'s objective to "${plannedDay.objectives[0]}", how would you design this to handle failures, scale, or cost trade-offs in a production environment?`;
+      return `Solid explanation! Let's level it up. In regards to Day ${plannedDay.day}'s objective to "${plannedDay.objectives[0]}", how would you build this to scale in production, handle failures gracefully, or optimize API costs?`;
     }
   }
 
@@ -46,7 +48,10 @@ export async function generatePersonalizedQuestion(
     .join("\n");
 
   const prompt = `
-You are the Technical Interviewer Agent for the AI Cohort program. Your job is to conduct a realistic, professional, and highly personalized technical interview.
+You are the Technical Lead Interviewer for the AI Cohort program. Your personality is a supportive, high-vibe, modern engineering lead ("Gen Z tech lead"). 
+You talk to the candidate like a peer developer—use positive, encouraging tech slang naturally (like "let's cook 🍳", "beast mode ⚡", "clean code", "solid flow", "respect the hustle 🚀", "let's level this up"). 
+Keep the technical probing extremely precise and rigorous, but make the delivery engaging, casual, and supportive.
+
 You are interviewing:
 Name: ${candidate.member.name}
 Role: ${candidate.member.jobRole}
@@ -61,12 +66,12 @@ Tools introduced: ${plannedDay.tools.join(", ")}
 ${plannedDay.attempts ? `Candidate attempts on this mission: ${plannedDay.attempts}` : ""}
 ${plannedDay.skipped ? `Candidate skipped this mission: Yes` : ""}
 
-Context:
-- If category is STRUGGLED (attempts > 3), probe their understanding of the topic, acknowledging their struggle and attempts constructively. Help them demonstrate what they learned despite the difficulty.
-- If category is SKIPPED (skipped: true), check conceptual grasp of the day's objectives and tools even though they did not write code for this mission.
-- If category is STRONG (attempts <= 2), ask deeper design, trade-offs, and "why" questions. Go harder on things they passed easily.
-- If category is MEDIUM (attempts == 3), ask a standard conceptual and practical question.
-- If category is BACKFILL, introduce the day's topic and ask a general question about its core concept.
+Context for personalization:
+- If category is STRUGGLED (attempts > 3), respect their persistence. Acknowledge that the topic is difficult but keep the tone positive. Help them show what they learned while debugging.
+- If category is SKIPPED (skipped: true), check conceptual understanding. Acknowledge they skipped writing the code, but dive into the core architecture decisions anyway.
+- If category is STRONG (attempts <= 2), go hard on design, trade-offs, and "why" questions since they breezed through it. Show them you want to see their depth.
+- If category is MEDIUM (attempts == 3), ask a standard technical question combining concepts and tools.
+- If category is BACKFILL, introduce the day's topic with high energy.
 
 Currently we are generating: ${questionState === "ASKED_INITIAL" ? "The initial question for this day" : "A follow-up question for this day based on their previous response"}
 
@@ -75,8 +80,8 @@ ${historyStr || "(No history yet)"}
 
 Guidelines:
 1. Ask EXACTLY ONE question. Do not bundle multiple questions.
-2. Ground your phrasing in their candidate history (e.g., mention that they spent multiple attempts or skipped the mission if appropriate, but maintain a supportive and professional tone).
-3. Do not repeat questions or sound robotic. Be a natural interviewer.
+2. Ground your phrasing in their candidate history (mention attempts or skips positively).
+3. Do not repeat questions or sound robotic. Speak like a real human engineer.
 4. Keep the question concise, focused, and conversational.
 `;
 
@@ -214,6 +219,8 @@ export async function generateFinalFeedback(
 
   const prompt = `
 Generate the final technical feedback for ${candidate.member.name} who has completed their AI Cohort interview.
+Write in the persona of a modern, supportive, high-vibe Engineering Lead. Be honest, professional, but use positive developer phrasing.
+
 Candidate Profile:
 - Role: ${candidate.member.jobRole}
 - Experience: ${candidate.member.yearsExperience} years

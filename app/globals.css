@@ -279,6 +279,53 @@ body {
   transition: var(--transition-smooth);
 }
 
+.plan-item:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.plan-item:hover:has(.plan-dot.struggled) {
+  border-color: var(--accent-rose);
+  box-shadow: 0 4px 15px rgba(244, 63, 94, 0.15);
+}
+
+.plan-item:hover:has(.plan-dot.skipped) {
+  border-color: var(--accent-amber);
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.15);
+}
+
+.plan-item:hover:has(.plan-dot.medium) {
+  border-color: var(--accent-blue);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.15);
+}
+
+.plan-item:hover:has(.plan-dot.strong) {
+  border-color: var(--secondary);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.15);
+}
+
+.plan-item:hover:has(.plan-dot.backfill) {
+  border-color: var(--text-secondary);
+  box-shadow: 0 4px 15px rgba(156, 163, 175, 0.1);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.15);
+  border-radius: 99px;
+  transition: var(--transition-smooth);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.4);
+}
+
 @keyframes pulse-border {
   0% { border-color: rgba(139, 92, 246, 0.25); box-shadow: 0 0 10px rgba(139, 92, 246, 0.1); }
   50% { border-color: rgba(139, 92, 246, 0.8); box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }

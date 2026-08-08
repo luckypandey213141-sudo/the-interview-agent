@@ -95,6 +95,34 @@ const TypewriterText = ({ text, onComplete }: { text: string; onComplete?: () =>
   );
 };
 
+// Map fun emojis to curriculum topics for a more modern, visual sidebar
+const getTopicEmoji = (day: number, title: string): string => {
+  const lowerTitle = title.toLowerCase();
+  if (lowerTitle.includes("setup") || lowerTitle.includes("environment")) return "⚙️";
+  if (lowerTitle.includes("react") || lowerTitle.includes("frontend")) return "💻";
+  if (lowerTitle.includes("structured") || lowerTitle.includes("pandas") || lowerTitle.includes("sql")) return "📊";
+  if (lowerTitle.includes("unstructured") || lowerTitle.includes("pdf")) return "📄";
+  if (lowerTitle.includes("knowledge") || lowerTitle.includes("base")) return "📚";
+  if (lowerTitle.includes("embeddings") || lowerTitle.includes("transformers")) return "🔍";
+  if (lowerTitle.includes("vector")) return "🧭";
+  if (lowerTitle.includes("retrieval") || lowerTitle.includes("matching")) return "⚡";
+  if (lowerTitle.includes("rag") || lowerTitle.includes("llm api")) return "🧠";
+  if (lowerTitle.includes("prompt")) return "💬";
+  if (lowerTitle.includes("function") || lowerTitle.includes("calling")) return "🔧";
+  if (lowerTitle.includes("fine-tuning")) return "🎯";
+  if (lowerTitle.includes("streaming")) return "🌊";
+  if (lowerTitle.includes("memory")) return "💾";
+  if (lowerTitle.includes("agent")) return "🤖";
+  if (lowerTitle.includes("mcp") || lowerTitle.includes("protocol")) return "🔌";
+  if (lowerTitle.includes("evaluation") || lowerTitle.includes("testing")) return "🧪";
+  if (lowerTitle.includes("cost") || lowerTitle.includes("optim")) return "📉";
+  if (lowerTitle.includes("security") || lowerTitle.includes("guard")) return "🛡️";
+  if (lowerTitle.includes("docker") || lowerTitle.includes("kubernetes")) return "🐋";
+  if (lowerTitle.includes("monitoring") || lowerTitle.includes("observ")) return "📈";
+  if (lowerTitle.includes("capstone") || lowerTitle.includes("demo")) return "🚀";
+  return "💡";
+};
+
 export default function Home() {
   const [candidatesList] = useState<Candidate[]>(candidatesData.candidates);
   const [selectedCandidateIndex, setSelectedCandidateIndex] = useState<number>(0);
@@ -403,7 +431,9 @@ export default function Home() {
                     >
                       <div className={`plan-dot ${planDay.category}`} />
                       <div className="plan-info">
-                        <div className="plan-title">Day {planDay.day}: {planDay.title}</div>
+                        <div className="plan-title">
+                          Day {planDay.day}: {getTopicEmoji(planDay.day, planDay.title)} {planDay.title}
+                        </div>
                         <div className="plan-type">
                           {planDay.category} {planDay.attempts ? `(${planDay.attempts} attempts)` : ""}
                         </div>
