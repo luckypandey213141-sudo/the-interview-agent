@@ -65,3 +65,27 @@ This log records the tool calls, prompts, and planning steps used by the AI Codi
   - `write_to_file("scratch/verify-flow.ts")` to simulate Sarah Johnson (struggled/skipped day flow) and Emily Chen (strong candidate flow).
   - `run_command("npx tsx scratch/verify-flow.ts")` to run the test script. (Exited with 0, matching planned constraints: >= 8 questions, >= 4 days, valid feedback).
   - `run_command("npm run build")` to verify typescript compilation and client-side code rendering. (Build completed successfully).
+
+---
+
+## Stage 6: Frontend Polish & Custom UI Integrations
+- **Action:** Enhanced UI aesthetics to feel more "live" (typewriter animations, background blur orbs) and integrated custom React components (MeshGradientSVG, compound ChatInput).
+- **Tool Calls:**
+  - `run_command("npm install framer-motion @paper-design/shaders-react")` to add interactive WebGL shader dependencies.
+  - `write_to_file("components/ui/shader-svg.tsx")` to implement the eye-tracking mesh gradient robot.
+  - `run_command("npm install lucide-react @radix-ui/react-slot class-variance-authority clsx tailwind-merge")` to add standard shadcn library dependencies.
+  - `write_to_file("lib/utils.ts")` to define the classname-merging `cn` function.
+  - `write_to_file("components/ui/button.tsx")` to create the Radix-Slot-capable Button component.
+  - `write_to_file("components/ui/textarea.tsx")` to create the custom text area.
+  - `write_to_file("hooks/use-textarea-resize.ts")` to implement auto-resizing text area height calculations.
+  - `write_to_file("components/ui/chat-input.tsx")` to write the compound ChatInput field component.
+  - `write_to_file("app/page.tsx")` (Overwrite) to integrate the `TypewriterText` effect, the background glowing ambient orbs, the `MeshGradientSVG` welcome robot, and the compound `<ChatInput>` structure.
+  - `write_to_file("app/globals.css")` (Overwrite) to map Tailwind class utilities to Vanilla CSS and style the interactive elements.
+  - `replace_file_content("app/globals.css")` to resolve button styling regressions by restoring the original `.btn-send` and `.btn-primary` selectors.
+  - `run_command("npm run build")` to ensure compilation and typing checks pass with 0 errors.
+  - `run_command` to commit and push changes:
+    ```bash
+    git add .
+    git commit -m "feat: integrate shader robot, compound chat input, and styling updates"
+    git push origin main
+    ```
