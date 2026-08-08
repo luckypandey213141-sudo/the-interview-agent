@@ -498,6 +498,55 @@ body {
   width: 100%;
 }
 
+.btn-send {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--primary), var(--accent-blue));
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+  transition: var(--transition-smooth);
+}
+
+.btn-send:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+}
+
+.btn-send:active {
+  transform: translateY(1px);
+}
+
+.btn-send:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-primary {
+  padding: 12px;
+  width: 100%;
+  background: linear-gradient(135deg, var(--primary), var(--accent-blue));
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  text-align: center;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
 /* Tailwind Class Mappings for Shadcn Components in our Vanilla CSS system */
 .flex { display: flex; }
 .flex-col { flex-direction: column; }
