@@ -43,6 +43,56 @@ interface Feedback {
   next: string[];
 }
 
+// Snappy, interactive Typewriter component that allows clicking to skip
+const TypewriterText = ({ text, onComplete }: { text: string; onComplete?: () => void }) => {
+  const [displayedText, setDisplayedText] = useState("");
+  const [skipped, setSkipped] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (skipped) {
+      setDisplayedText(text);
+      if (onComplete) onComplete();
+      return;
+    }
+
+    let index = 0;
+    setDisplayedText("");
+    if (timerRef.current) clearInterval(timerRef.current);
+
+    timerRef.current = setInterval(() => {
+      setDisplayedText((prev) => prev + text.charAt(index));
+      index++;
+      if (index >= text.length) {
+        if (timerRef.current) clearInterval(timerRef.current);
+        if (onComplete) onComplete();
+      }
+    }, 10); // snappier writing speed for better QoL
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [text, skipped]);
+
+  return (
+    <span onClick={() => setSkipped(true)} style={{ cursor: "pointer" }} title="Click to skip typing">
+      {displayedText}
+      {!skipped && displayedText.length < text.length && (
+        <span 
+          style={{
+            fontWeight: "bold",
+            color: "var(--primary)",
+            marginLeft: "2px",
+            animation: "blink 0.8s infinite"
+          }}
+        >
+          |
+        </span>
+      )}
+    </span>
+  );
+};
+
 export default function Home() {
   const [candidatesList] = useState<Candidate[]>(candidatesData.candidates);
   const [selectedCandidateIndex, setSelectedCandidateIndex] = useState<number>(0);
@@ -199,11 +249,6 @@ export default function Home() {
         setIsDone(true);
         setFeedback(data.feedback);
       } else {
-        // Adjust the client visualization day progress dynamically
-        // Since we are running the engine in the backend, we can infer index increases
-        // if the question count ticks. For simplicity, we can also query state, or
-        // we can estimate. Let's estimate or just increment index based on question count:
-        // A standard interview ask 2 questions per day, so index = floor(questionsCount / 2).
         const nextIndex = Math.min(Math.floor((questionsCount + 1) / 2), coveragePlan.length - 1);
         setCurrentPlanIndex(nextIndex);
       }
@@ -224,7 +269,6 @@ export default function Home() {
     
     let list = [...struggled, ...skipped, ...medium, ...strong];
     if (list.length < 4) {
-      // Add placeholders
       for (let i = 1; i <= 31; i++) {
         if (list.length >= 4) break;
         if (!list.find(x => x.day === i)) {
@@ -237,6 +281,13 @@ export default function Home() {
 
   return (
     <div className="app-container">
+      {/* Ambient background container */}
+      <div className="ambient-container">
+        <div className="ambient-orb orb-1"></div>
+        <div className="ambient-orb orb-2"></div>
+        <div className="ambient-orb orb-3"></div>
+      </div>
+
       {/* Sidebar Panel */}
       <div className="sidebar">
         <div className="brand">
@@ -400,12 +451,22 @@ export default function Home() {
             </div>
 
             <div className="messages-container">
-              {messages.map((msg, index) => (
-                <div key={index} className={`message-wrapper ${msg.role}`}>
-                  <div className="message-bubble">{msg.text}</div>
-                  <div className="message-meta">{msg.timestamp}</div>
-                </div>
-              ))}
+              {messages.map((msg, index) => {
+                const isLast = index === messages.length - 1;
+                const isInterviewer = msg.role === "interviewer";
+                return (
+                  <div key={index} className={`message-wrapper ${msg.role}`}>
+                    <div className="message-bubble">
+                      {isLast && isInterviewer ? (
+                        <TypewriterText text={msg.text} />
+                      ) : (
+                        <span>{msg.text}</span>
+                      )}
+                    </div>
+                    <div className="message-meta">{msg.timestamp}</div>
+                  </div>
+                );
+              })}
 
               {isLoading && (
                 <div className="message-wrapper interviewer">
