@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import candidatesData from "@/lib/candidates.json";
 import { MeshGradientSVG } from "@/components/ui/shader-svg";
+import { ChatInput, ChatInputTextArea, ChatInputSubmit } from "@/components/ui/chat-input";
 
 interface CandidateMember {
   id: string;
@@ -197,8 +198,8 @@ export default function Home() {
     }
   };
 
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSendMessage = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (!inputMessage.trim() || isLoading || isDone) return;
 
     const userText = inputMessage.trim();
@@ -481,19 +482,22 @@ export default function Home() {
               <div ref={messagesEndRef} />
             </div>
 
-            <form className="chat-input-bar" onSubmit={handleSendMessage}>
-              <input
-                type="text"
-                className="chat-input"
-                placeholder={isDone ? "Interview completed" : "Type your technical response here..."}
+            <div className="chat-input-bar">
+              <ChatInput
+                variant="default"
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
-                disabled={isLoading || isDone}
-              />
-              <button type="submit" className="btn-send" disabled={isLoading || isDone || !inputMessage.trim()}>
-                Send
-              </button>
-            </form>
+                onSubmit={handleSendMessage}
+                loading={isLoading}
+              >
+                <ChatInputTextArea 
+                  className="chat-input"
+                  placeholder={isDone ? "Interview completed" : "Type your technical response here..."}
+                  disabled={isLoading || isDone}
+                />
+                <ChatInputSubmit />
+              </ChatInput>
+            </div>
           </>
         )}
       </div>
