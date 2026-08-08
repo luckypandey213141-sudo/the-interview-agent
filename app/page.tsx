@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import candidatesData from "@/lib/candidates.json";
+import { MeshGradientSVG } from "@/components/ui/shader-svg";
 
 interface CandidateMember {
   id: string;
@@ -427,7 +428,7 @@ export default function Home() {
       <div className="chat-area">
         {!isInterviewStarted ? (
           <div className="empty-state">
-            <div className="empty-state-icon">🤖</div>
+            <MeshGradientSVG />
             <h2>AI Cohort Interview Agent</h2>
             <p style={{ maxWidth: "460px", color: "var(--text-secondary)", fontSize: "0.95rem" }}>
               Configure a candidate from the left panel and click **Start Interview** to begin a personalized,
